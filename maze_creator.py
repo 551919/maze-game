@@ -216,16 +216,28 @@ def button_pressed(x_coor,y_coor):
             for i in range(height):
                 line = custom_maze.readline().split()
                 for j in range(len(line)):
-                    line[j] = int(line[j])
+                    if int(line[j])>9 or int(line[j]) < 0 or (int(line[j]) >1 and int(line[j])<5):
+                        line[j] = int(1)
+                    else:
+                        line[j] = int(line[j])
                 
                 grid.append(line)
+            
+            #Reads custom powerup amounts (Last line of file)
             powerups = custom_maze.readline().split()
+            for index in range(len(powerups)):
+                powerups[index] = int(powerups[index])
+                if powerups[index]<0:
+                    powerups[index] = 0
+                elif powerups[index]>999:
+                    powerups[index] = 999
 
-            num_of_bombs = int(powerups[0])
-            num_of_lasers = int(powerups[1])
-            teleport_num = int(powerups[2])
-            num_of_path_clears = int(powerups[3])
-            powerup_shuffles = int(powerups[4])
+
+            num_of_bombs = powerups[0]
+            num_of_lasers = powerups[1]
+            teleport_num = powerups[2]
+            num_of_path_clears = powerups[3]
+            powerup_shuffles = powerups[4]
             is_custom = True
 
         grid[0][0] = 3
@@ -281,11 +293,11 @@ def draw_grid():
             block_stamp.stamp()
 
     score_pen.clear()
+    wn.update()
     if float(score) - int(score) == 0:
         score_pen.write("Score: " + str(int(score)), move=False, align="center", font= small_font)
     else:
         score_pen.write("Score: " + str(float(score)), move=False, align="center", font= small_font)
-    time.sleep(0.1)
 
     #Pruning to only rewrite powerup values if it changed
     if powerup_value_changed and game_started:
@@ -294,19 +306,19 @@ def draw_grid():
         word_pen.clear()
 
         #Display inventory drawings
-        word_pen.setpos(-380,-310)
+        word_pen.setpos(-380,-305)
         word_pen.color(colors[5])
         word_pen.stamp()
-        word_pen.setpos(-190,-310)
+        word_pen.setpos(-190,-305)
         word_pen.color(colors[6])
         word_pen.stamp()
-        word_pen.setpos(0,-310)
+        word_pen.setpos(0,-305)
         word_pen.color(colors[7])
         word_pen.stamp()
-        word_pen.setpos(190,-310)
+        word_pen.setpos(190,-305)
         word_pen.color(colors[8])
         word_pen.stamp()
-        word_pen.setpos(380,-310)
+        word_pen.setpos(380,-305)
         word_pen.color(colors[9])
         word_pen.stamp()
 
@@ -316,16 +328,31 @@ def draw_grid():
         word_pen.write("Turtle Adventure", move=False, align="center", font= standard_font )
         word_pen.setpos(0,-293)
         word_pen.write("Inventory", move=False, align="center", font= small_font)
-        word_pen.setpos(-380,-350)
+
+        word_pen.setpos(-380,-342)
         word_pen.write("Bombs: " + str(num_of_bombs), move=False, align="center", font= small_font)
-        word_pen.setpos(-190,-350)
+        word_pen.setpos(-380,-367)
+        word_pen.write("'r'", move=False, align="center", font= small_font)
+
+        word_pen.setpos(-190,-342)
         word_pen.write("Lasers: " + str(num_of_lasers), move=False, align="center", font= small_font)
-        word_pen.setpos(0,-350)
+        word_pen.setpos(-190,-367)
+        word_pen.write("Vertical: 'e', Horizontal: 'q'", move=False, align="center", font= small_font)
+
+        word_pen.setpos(0,-342)
         word_pen.write("Teleports: " + str(teleport_num), move=False, align="center", font= small_font)
-        word_pen.setpos(190,-350)
+        word_pen.setpos(0,-370)
+        word_pen.write("'E'", move=False, align="center", font= small_font)
+
+        word_pen.setpos(190,-342)
         word_pen.write("Path Clears: " + str(num_of_path_clears), move=False, align="center", font= small_font)
-        word_pen.setpos(380,-350)
+        word_pen.setpos(190,-367)
+        word_pen.write("'Q'", move=False, align="center", font= small_font)
+
+        word_pen.setpos(380,-342)
         word_pen.write("Powerup Shuffles: " + str(powerup_shuffles), move=False, align="center", font= small_font)
+        word_pen.setpos(380,-367)
+        word_pen.write("'R'", move=False, align="center", font= small_font)
 
         powerup_value_changed = False
     wn.update()
@@ -376,6 +403,7 @@ def move_left():
             grid[sprite_y][sprite_x] = 3
             score += score_multiplyer
             draw_grid()
+            time.sleep(0.1)
         
 def move_right():
     global grid
@@ -422,6 +450,7 @@ def move_right():
             grid[sprite_y][sprite_x] = 3
             score += score_multiplyer
             draw_grid()
+            time.sleep(0.1)
                     
 def move_up():
     global grid
@@ -467,6 +496,7 @@ def move_up():
             grid[sprite_y][sprite_x] = 3
             score += score_multiplyer
             draw_grid()
+            time.sleep(0.1)
         
 def move_down():
     global grid
@@ -511,6 +541,7 @@ def move_down():
             grid[sprite_y][sprite_x] = 3
             score += score_multiplyer
             draw_grid()
+            time.sleep(0.1)
 
 def use_bomb():
     global grid
@@ -519,6 +550,7 @@ def use_bomb():
     global score
     global num_of_bombs
     global score_multiplyer
+    global powerup_value_changed
     i_offset = [-2,-1,0,1,2]
     j_offset = [-2,-1,0,1,2]
 
@@ -534,6 +566,7 @@ def use_bomb():
     
     num_of_bombs -= 1
     grid[sprite_y][sprite_x] = 3
+    powerup_value_changed = True
     draw_grid()
 
 def horizontal_laser():
@@ -543,6 +576,7 @@ def horizontal_laser():
     global score
     global num_of_lasers
     global score_multiplyer
+    global powerup_value_changed
     if num_of_lasers <= 0:
         return
     for i in range(6):
@@ -557,6 +591,7 @@ def horizontal_laser():
     
     num_of_lasers -= 1
     grid[sprite_y][sprite_x] = 3
+    powerup_value_changed = True
     draw_grid()
 
 def vertical_laser():
@@ -566,6 +601,7 @@ def vertical_laser():
     global score
     global num_of_lasers
     global score_multiplyer
+    global powerup_value_changed
     if num_of_lasers <= 0:
         return
     for i in range(6):
@@ -580,11 +616,13 @@ def vertical_laser():
     
     num_of_lasers -= 1
     grid[sprite_y][sprite_x] = 3
+    powerup_value_changed = True
     draw_grid()
 
 def clear_path():
     global grid
     global num_of_path_clears
+    global powerup_value_changed
 
     if num_of_path_clears <= 0:
         return
@@ -595,6 +633,7 @@ def clear_path():
                 grid[i][j] = 0
     
     num_of_path_clears -= 1
+    powerup_value_changed = True
     draw_grid()
 
 def teleport():
@@ -604,6 +643,7 @@ def teleport():
     global sprite_y
     global score
     global score_multiplyer
+    global powerup_value_changed
     if teleport_num <= 0:
         return
     i_offset = [-3,-2,-1,0,1,2,3]
@@ -626,11 +666,13 @@ def teleport():
                 score += score_multiplyer
     teleport_num -= 1
     grid[sprite_y][sprite_x] = 3
+    powerup_value_changed = True
     draw_grid()
 
 def shuffle_powerups():
     global grid
     global powerup_shuffles
+    global powerup_value_changed
 
     if powerup_shuffles<= 0:
         return
@@ -644,18 +686,19 @@ def shuffle_powerups():
     #Function that randomly adds powerups players can collect
     for i in range(len(grid)):
         for j in range(len(grid[i])):
-            if grid[i][j] == 0 and random.randint(1,125) == 42:
+            if grid[i][j] == 0 and random.randint(1,125) == 2:
                 grid[i][j] = 5
-            elif grid[i][j] == 0 and random.randint(1,200) == 18:
+            elif grid[i][j] == 0 and random.randint(1,200) == 2:
                 grid [i][j] = 6
-            elif grid[i][j] == 0 and random.randint(1,350) == 36:
+            elif grid[i][j] == 0 and random.randint(1,350) == 2:
                 grid [i][j] = 7
-            elif grid[i][j] == 0 and random.randint(1,650) == 274:
+            elif grid[i][j] == 0 and random.randint(1,400) == 2:
                 grid [i][j] = 8
-            elif grid[i][j] == 0 and random.randint(1,700) == 654:
+            elif grid[i][j] == 0 and random.randint(1,400) == 2:
                 grid [i][j] = 9
 
     powerup_shuffles -= 1
+    powerup_value_changed = True
     draw_grid()
     
 #Checks if player lost
