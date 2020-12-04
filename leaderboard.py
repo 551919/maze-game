@@ -102,10 +102,10 @@ def draw_leaderboard(made_leaderboard, file_name, turtle_object, player_score, p
   turtle_object.pendown()
   if (made_leaderboard):
     turtle_object.color("ghostwhite")
-    turtle_object.write("You Made The Leaderboard", align = "center", font=font_setup)
+    turtle_object.write("You Made The Leaderboard. Returning Home in 10 Seconds", align = "center", font=font_setup)
   else:
     turtle_object.color("black")
-    turtle_object.write("You Did Not Make The Leaderboard", align = "center", font=font_setup)
+    turtle_object.write("You Did Not Make The Leaderboard. Returning Home in 10 Seconds", align = "center", font=font_setup)
 
   turtle_object.color("black")
   if player_win:
@@ -113,7 +113,7 @@ def draw_leaderboard(made_leaderboard, file_name, turtle_object, player_score, p
     # move turtle to a new line
     turtle_object.goto(0,int(turtle_object.ycor())-50)
     turtle_object.pendown()
-    turtle_object.write("Your Score: " + player_score, align = "center", font=font_setup)
+    turtle_object.write("Your Score: " + str(player_score), align = "center", font=font_setup)
   turtle_object.penup()
   # move turtle to a new line
   turtle_object.goto(0,int(turtle_object.ycor())-50)
@@ -139,6 +139,3 @@ def draw_leaderboard(made_leaderboard, file_name, turtle_object, player_score, p
   else:
     turtle_object.color("black")
     turtle_object.write("Rank: None", align = "center", font=font_setup)
-  
-
-  
