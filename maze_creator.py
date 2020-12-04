@@ -34,9 +34,6 @@ length = 30
 height = 30
 score = 0
 
-leaderboard_file_name = "leaderboard.txt"
-custom_maze_file = "custom_maze.txt"
-
 #Set up screen configurations
 wn = turtle.Screen()
 wn.setup(1000,850)
@@ -149,7 +146,6 @@ def home_screen():
 def button_pressed(x_coor,y_coor):
     global button_names
     global game_started
-    global custom_maze_file
     global length
     global height
     global grid
@@ -215,7 +211,8 @@ def button_pressed(x_coor,y_coor):
 
         #Reads custom maze file and puts it into the grid for ucstom mode
         else:
-            custom_maze = open(custom_maze_file,"r")
+            #Not using a string for custom maze file because python looks in different directory
+            custom_maze = open('custom_maze.txt' , 'r')
             for i in range(height):
                 line = custom_maze.readline().split()
                 for j in range(len(line)):
@@ -786,7 +783,6 @@ def check_lose():
 
 #Shows player they won, sees if they made leaderboard, displays leaderboard
 def player_wins():
-    global leaderboard_file_name
     global score
     global username
     global is_custom
@@ -797,14 +793,7 @@ def player_wins():
     wn.bgcolor("dimgrey")
     wn.tracer(False)
     wn.onclick(lambda x,y: button_pressed(x,y))
-    #Set up home button
-    home_button.sety(395)
-    home_button.color("black")
-    home_button.write("Home", move=False, align="center", font= small_font)
-    home_button.sety(375)
-    home_button.color("lime")
-    home_button.stamp()
-
+    
     if is_custom:
         word_pen.goto(0,150)
         word_pen.color("white")
@@ -812,10 +801,11 @@ def player_wins():
         word_pen.goto(0,80)
         word_pen.write("Your score: " + str(int(score)), move = False, align = "center", font = small_font)
         return
-    made_leaderboard = leaderboard.update_leaderboard(leaderboard_file_name,leaderboard_values,username,score)
-    leaderboard.draw_leaderboard(made_leaderboard,leaderboard_file_name, word_pen, int(score),True)
-
+    made_leaderboard = leaderboard.update_leaderboard('leaderboard.txt',leaderboard_values,username,score)
+    leaderboard.draw_leaderboard(made_leaderboard,'leaderboard.txt', word_pen, int(score),True)
+    time.sleep(10)
     home_screen()
+
 
 #Shows player they lost, displays leader
 def player_lose():

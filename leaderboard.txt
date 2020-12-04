@@ -1,5 +1,5 @@
-Empty,0
-Empty,0
-Empty,0
-Empty,0
-Empty,0
+ak,149
+ak,101
+ak,98
+ak,98
+ak,95
