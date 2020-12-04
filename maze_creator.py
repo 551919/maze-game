@@ -26,6 +26,7 @@ difficulty = 0
 
 standard_font = ("Times New Roman", 24, "normal")
 small_font = ("Times New Roman", 18, "normal")
+rules_font = ("Times New Roman", 14, "normal")
 
 sprite_x = 0
 sprite_y = 0
@@ -104,10 +105,10 @@ def home_screen():
     global score_multiplyer
 
     #Default powerup values
-    num_of_bombs = 1
-    num_of_lasers = 2
+    num_of_bombs = 2
+    num_of_lasers = 3
     num_of_path_clears = 1
-    teleport_num = 1
+    teleport_num = 2
     powerup_shuffles = 2
 
     wn.tracer(False)
@@ -125,6 +126,7 @@ def home_screen():
     powerup_value_changed = True
     game_started = False
 
+    #Title
     word_pen.color("black")
     word_pen.setpos(0,325)
     word_pen.penup()
@@ -176,6 +178,7 @@ def button_pressed(x_coor,y_coor):
         elif y_coor<-170 and y_coor>-320:
             button_index=2
     
+    #Shows that button to start game has been pressed)
     if button_index==0 or button_index == 1:
         wn.clear()
         wn.bgcolor("aqua")
@@ -191,15 +194,15 @@ def button_pressed(x_coor,y_coor):
         wn.onkeypress(lambda: teleport(), "E")
         wn.onkeypress(lambda: shuffle_powerups(), "R")
         
-        #Maze randomly set up
+        #Maze randomly set up for random mode
         if button_index == 0:
             #Set up grid (Number corresponds to color, 0 is empty, 1 is wall)
             grid = []
 
-            num_of_bombs = 1
-            num_of_lasers = 2
+            num_of_bombs = 2
+            num_of_lasers = 3
             num_of_path_clears = 1
-            teleport_num = 1
+            teleport_num = 2
             powerup_shuffles = 2
             
             for i in range(height):
@@ -210,7 +213,7 @@ def button_pressed(x_coor,y_coor):
             generate_grid()
             is_custom = False
 
-        #Reads custom maze file and puts it into the grid
+        #Reads custom maze file and puts it into the grid for ucstom mode
         else:
             custom_maze = open(custom_maze_file,"r")
             for i in range(height):
@@ -242,7 +245,7 @@ def button_pressed(x_coor,y_coor):
 
         grid[0][0] = 3
         grid[height-1][length-1] = 4
-
+        #Set up home button
         home_button.sety(395)
         home_button.color("black")
         home_button.write("Home", move=False, align="center", font= small_font)
@@ -251,7 +254,58 @@ def button_pressed(x_coor,y_coor):
         home_button.stamp()
         draw_grid()
         wn.update()
+    elif button_index == 2:
+        wn.clear()
+        wn.bgcolor("aqua")
+        wn.onclick(lambda x,y: button_pressed(x,y))
+        #Set up home button
+        home_button.sety(395)
+        home_button.color("black")
+        home_button.write("Home", move=False, align="center", font= small_font)
+        home_button.sety(375)
+        home_button.color("lime")
+        home_button.stamp()
 
+        #Title
+        word_pen.color("black")
+        word_pen.setpos(0,325)
+        word_pen.write("Turtle Adventure Rules", move=False, align="center", font= standard_font )
+
+        word_pen.setpos(-400,260)
+        word_pen.write("You start as the red square in the top left corner of the randomly generated maze \nand must get to the gold square to win" +
+        "In addition you can also get points and get a high score", move=False, align="left", font= rules_font )
+
+        word_pen.sety(190)
+        word_pen.write("You move with ‘wasd‘ （w is up, s is down, a is left, d is right) and a blue trail \nfollows wherever you move so you can’t go back", move=False, align="left", font= rules_font)
+
+        word_pen.sety(155)
+        word_pen.write("Each time you move you get 1 point" , move=False, align="left", font= rules_font)
+
+        word_pen.sety(85)
+        word_pen.write("Power ups randomly spawn within the maze, your power up inventory is located on the \nbottom of the screen", move=False, align="left", font= rules_font)
+
+        word_pen.sety(50)
+        word_pen.write("Purple is a bomb and will destroy all walls in a 2 block radius when you press 'r'", move=False, align="left", font= rules_font)
+
+        word_pen.sety(-20)
+        word_pen.write("Lime is a laser and will destroy 4 blocks to the right and left of your character when \nyou press 'q'"
+        + "and 4 blocks above and below when you press 'e'", move=False, align="left", font= rules_font)
+
+        word_pen.sety(-90)
+        word_pen.write("Green will teleport you to a random location and will destroy all blocks in a 3 block\n" + 
+        "radius, it is activated with the Shift + 'e' key", move=False, align="left", font= rules_font)
+
+        word_pen.sety(-125)
+        word_pen.write("Pink will clear all blue the blue blocks in the maze when you press Shift + 'r'", move=False, align="left", font= rules_font)
+
+        word_pen.sety(-195)
+        word_pen.write("Brown will clear all the power ups on the board and add new ones. \nIt is activated with Shift + 'R'", move=False, align="left", font= rules_font)
+
+        word_pen.sety(-230)
+        word_pen.write("The purple, lime, and green power ups will give you 1 point per block broken", move=False, align="left", font= rules_font)
+
+        word_pen.setpos(0,-300)
+        word_pen.write("Have Fun!", move=False, align="center", font= small_font )
 
 #Function that redraws grid after every block
 def draw_grid():
@@ -743,7 +797,7 @@ def player_wins():
     wn.bgcolor("dimgrey")
     wn.tracer(False)
     wn.onclick(lambda x,y: button_pressed(x,y))
-
+    #Set up home button
     home_button.sety(395)
     home_button.color("black")
     home_button.write("Home", move=False, align="center", font= small_font)
@@ -769,6 +823,7 @@ def player_lose():
     wn.bgcolor("dimgrey")
     wn.tracer(False)
     wn.onclick(lambda x,y: button_pressed(x,y))
+    #Set up home button
     home_button.sety(395)
     home_button.color("black")
     home_button.write("Home", move=False, align="center", font= small_font)
