@@ -270,7 +270,7 @@ def button_pressed(x_coor,y_coor):
 
         word_pen.setpos(-400,260)
         word_pen.write("You start as the red square in the top left corner of the randomly generated maze \nand must get to the gold square to win" +
-        "In addition you can also get points and get a high score", move=False, align="left", font= rules_font )
+        ".  In addition you can also get points and get a high score", move=False, align="left", font= rules_font )
 
         word_pen.sety(190)
         word_pen.write("You move with ‘wasd‘ （w is up, s is down, a is left, d is right) and a blue trail \nfollows wherever you move so you can’t go back", move=False, align="left", font= rules_font)
